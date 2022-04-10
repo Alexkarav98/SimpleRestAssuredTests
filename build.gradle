@@ -1,0 +1,47 @@
+plugins {
+    id 'java'
+}
+
+
+group 'org.example'
+version '1.0-SNAPSHOT'
+
+def restAssuredVersion ="5.0.1"
+def slf4jVersion = '1.7.36'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+
+    testImplementation(
+            'org.junit.jupiter:junit-jupiter-api:5.8.2',
+            "io.rest-assured:rest-assured:$restAssuredVersion",
+            "com.github.javafaker:javafaker:1.0.2",
+    )
+    testRuntimeOnly(
+            'org.junit.jupiter:junit-jupiter-engine:5.8.2',
+            "org.slf4j:slf4j-simple:$slf4jVersion",
+    )
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+tasks.withType(Test) {
+    systemProperties(System.getProperties())
+    useJUnitPlatform()
+
+    testLogging {
+        lifecycle {
+            events "started", "skipped", "failed", "standard_error", "standard_out"
+            exceptionFormat "short"
+        }
+    }
+}
+
+test {
+    useJUnitPlatform()
+}
